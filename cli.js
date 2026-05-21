@@ -7,7 +7,7 @@ function printHelp() {
 Meme Generator Sharp Module
 
 Usage:
-  node cli.js --image background.jpg --top "WOWOWO" --bottom "BISING BODO AKU" --out output/meme.png
+  node cli.js --image background.jpg --top "WHEN THE BUILD PASSES" --bottom "ON THE FIRST TRY" --out output/meme.png
 
 Options:
   --image <file>       Background image. Alias: --input.
@@ -27,7 +27,7 @@ Options:
 }
 
 async function main() {
-  const { values } = parseArgs({
+  const { values: cliOptions } = parseArgs({
     options: {
       image: { type: 'string' },
       input: { type: 'string' },
@@ -46,33 +46,33 @@ async function main() {
     }
   });
 
-  if (values.help) {
+  if (cliOptions.help) {
     printHelp();
     return;
   }
 
-  const input = values.image ?? values.input;
+  const input = cliOptions.image ?? cliOptions.input;
   if (!input) {
     printHelp();
     throw new Error('Missing --image or --input.');
   }
 
-  const output = values.out;
+  const output = cliOptions.out;
   const inferredFormat = output.match(/\.(png|jpe?g|webp)$/i)?.[1]?.toLowerCase();
 
   const result = await generateMemeFile({
     input,
     output,
-    topText: values.top,
-    bottomText: values.bottom,
-    format: values.format ?? inferredFormat ?? 'png',
-    textColor: values['text-color'],
-    strokeColor: values['stroke-color'],
-    fontPath: values.font,
-    fontSizeRatio: values['font-ratio'] === undefined ? undefined : Number(values['font-ratio']),
-    captionHeightRatio: values['caption-ratio'] === undefined ? undefined : Number(values['caption-ratio']),
-    uppercase: !values['no-caps'],
-    shadow: !values['no-shadow']
+    topText: cliOptions.top,
+    bottomText: cliOptions.bottom,
+    format: cliOptions.format ?? inferredFormat ?? 'png',
+    textColor: cliOptions['text-color'],
+    strokeColor: cliOptions['stroke-color'],
+    fontPath: cliOptions.font,
+    fontSizeRatio: cliOptions['font-ratio'] === undefined ? undefined : Number(cliOptions['font-ratio']),
+    captionHeightRatio: cliOptions['caption-ratio'] === undefined ? undefined : Number(cliOptions['caption-ratio']),
+    uppercase: !cliOptions['no-caps'],
+    shadow: !cliOptions['no-shadow']
   });
 
   console.log(`OK: ${result.output}`);

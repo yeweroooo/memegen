@@ -18,8 +18,8 @@ const background = await sharp(Buffer.from(backgroundSvg)).png().toBuffer();
 await generateMemeFile({
   background,
   output: 'output/demo-meme.png',
-  topText: 'wowowo',
-  bottomText: 'bising bodo aku nak tido',
+  topText: 'when the demo works',
+  bottomText: 'ship it with confidence',
   textColor: '#ffffff',
   strokeColor: '#000000'
 });

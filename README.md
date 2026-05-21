@@ -1,43 +1,34 @@
 # Memegen
 
-Node.js module untuk membuat meme dari gambar background. Ukuran output otomatis mengikuti ukuran asli background, teks atas dan bawah otomatis wrap, dan font akan mengecil sendiri supaya tidak keluar dari gambar.
+A JavaScript module for creating memes with [Sharp](https://sharp.pixelplumbing.com/), automatic text wrapping, shrink-to-fit captions, and a bundled meme-style font.
 
-Module ini memakai `sharp` untuk render image dan font `Anton` dari Google Fonts untuk gaya meme klasik yang tebal.
+Memegen takes a background image, keeps the original image size, and draws top and bottom captions that stay inside the image bounds. It works as an ESM module and as a command-line tool.
 
-English summary: **A JavaScript module for creating memes with Sharp, bundled Anton font, automatic text wrapping, and shrink-to-fit captions.**
+## Features
 
-## Fitur
+- Keeps the output size equal to the background image size.
+- Supports top and bottom caption text.
+- Automatically wraps long text.
+- Automatically shrinks text until it fits the caption area.
+- Can choose readable text color from the background (`textColor: 'auto'`).
+- Classic meme outline and subtle shadow.
+- Bundled Anton font from Google Fonts, so servers do not need system fonts installed.
+- Outputs `png`, `jpg/jpeg`, or `webp`.
+- Usable from code or from the CLI.
 
-- Output mengikuti resolusi background.
-- Teks atas dan bawah.
-- Auto wrap untuk kalimat panjang.
-- Auto shrink agar teks tetap masuk area gambar.
-- Auto warna teks berdasarkan background (`textColor: 'auto'`).
-- Outline dan shadow gaya meme klasik.
-- Font `Anton` sudah dibundel, jadi tidak perlu install font di server.
-- Bisa output `png`, `jpg/jpeg`, atau `webp`.
-- Bisa dipakai sebagai module ESM atau CLI.
+## Installation
 
-## Install
-
-Jika sudah dipublish ke npm:
+From npm:
 
 ```bash
 npm install memegen
 ```
 
-Jika masih dari repository lokal:
+From a local clone:
 
 ```bash
 git clone <repo-url>
 cd memegen
-npm install
-```
-
-Untuk folder project ini:
-
-```bash
-cd meme
 npm install
 ```
 
@@ -49,14 +40,14 @@ import { generateMemeFile } from 'memegen';
 await generateMemeFile({
   input: 'background.jpg',
   output: 'output/meme.png',
-  topText: 'wowowo',
-  bottomText: 'bising bodo aku nak tido'
+  topText: 'WHEN THE CODE WORKS',
+  bottomText: 'BUT YOU DO NOT KNOW WHY'
 });
 ```
 
-Output akan memakai ukuran asli `background.jpg`.
+The output image will use the original dimensions of `background.jpg`.
 
-## Pakai Buffer
+## Return a Buffer
 
 ```js
 import { readFile } from 'node:fs/promises';
@@ -64,33 +55,33 @@ import { generateMeme } from 'memegen';
 
 const background = await readFile('background.jpg');
 
-const buffer = await generateMeme({
+const memeBuffer = await generateMeme({
   background,
-  topText: 'teks atas',
-  bottomText: 'teks bawah',
+  topText: 'TOP TEXT',
+  bottomText: 'BOTTOM TEXT',
   format: 'png'
 });
 ```
 
-`buffer` bisa langsung dikirim ke API, bot WhatsApp/Telegram/Discord, atau disimpan sendiri.
+You can send the returned `Buffer` directly from an API route, bot, or serverless function.
 
 ## CLI
 
 ```bash
 npx memegen \
   --image background.jpg \
-  --top "wowowo" \
-  --bottom "bising bodo aku nak tido" \
+  --top "WHEN THE BUILD PASSES" \
+  --bottom "ON THE FIRST TRY" \
   --out output/meme.png
 ```
 
-Jika menjalankan dari repo lokal:
+From a local checkout:
 
 ```bash
 node cli.js \
   --image background.jpg \
-  --top "wowowo" \
-  --bottom "bising bodo aku nak tido" \
+  --top "WHEN THE BUILD PASSES" \
+  --bottom "ON THE FIRST TRY" \
   --out output/meme.png
 ```
 
@@ -98,7 +89,7 @@ node cli.js \
 
 ### `generateMemeFile(options)`
 
-Render meme lalu simpan ke file.
+Renders a meme and writes it to disk.
 
 ```js
 const result = await generateMemeFile({
@@ -109,7 +100,7 @@ const result = await generateMemeFile({
 });
 ```
 
-Return:
+Returns:
 
 ```js
 {
@@ -125,10 +116,10 @@ Return:
 
 ### `generateMeme(options)`
 
-Render meme dan return `Buffer`.
+Renders a meme and returns a `Buffer`.
 
 ```js
-const buffer = await generateMeme({
+const memeBuffer = await generateMeme({
   input: 'background.jpg',
   topText: 'TOP',
   bottomText: 'BOTTOM'
@@ -137,7 +128,7 @@ const buffer = await generateMeme({
 
 ### `renderMeme(options)`
 
-Render meme dan return metadata lengkap tanpa harus menyimpan file.
+Renders a meme and returns the image buffer plus layout metadata.
 
 ```js
 const result = await renderMeme({
@@ -151,14 +142,14 @@ console.log(result.width, result.height, result.top.lines);
 
 ### `layoutMemeText(options)`
 
-Cek layout teks tanpa render image. Ini berguna untuk testing.
+Calculates the text layout without rendering an image. This is useful for tests and previews.
 
 ```js
 const layout = layoutMemeText({
   width: 600,
   height: 600,
-  topText: 'wowowo',
-  bottomText: 'kalimat panjang yang akan di-wrap otomatis'
+  topText: 'THIS IS A LONG TOP CAPTION',
+  bottomText: 'THIS LONG BOTTOM CAPTION WILL WRAP AUTOMATICALLY'
 });
 
 console.log(layout.bottom.lines);
@@ -166,57 +157,57 @@ console.log(layout.bottom.lines);
 
 ## Options
 
-| Option | Type | Default | Keterangan |
+| Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `input` / `image` / `background` | `string | Buffer | Uint8Array` | wajib | Background image. |
-| `output` / `out` | `string` | wajib untuk `generateMemeFile` | Path output. |
-| `topText` / `top` | `string` | `''` | Teks atas. |
-| `bottomText` / `bottom` | `string` | `''` | Teks bawah. |
-| `uppercase` | `boolean` | `true` | Ubah teks menjadi huruf besar. |
-| `format` | `png | jpg | jpeg | webp` | `png` | Format output. |
-| `quality` | `number` | `92` | Quality untuk JPG/WebP. |
-| `textColor` | `auto | string` | `auto` | Warna teks. |
-| `strokeColor` | `auto | string` | `auto` | Warna outline. |
-| `strokeWidthRatio` | `number` | `0.075` | Ketebalan outline relatif terhadap font. |
-| `shadow` | `boolean` | `true` | Aktifkan drop shadow. |
-| `paddingRatio` | `number` | `0.045` | Padding area teks. |
-| `captionHeightRatio` | `number` | `0.25` | Tinggi area teks atas/bawah. |
-| `fontSizeRatio` | `number` | `0.145` | Ukuran font awal. |
-| `minFontSizeRatio` | `number` | `0.018` | Ukuran font minimum. |
-| `lineHeight` | `number` | `0.92` | Jarak antar baris. |
-| `fontPath` | `string | Buffer | Uint8Array | false` | bundled Anton | Font TTF/OTF custom. |
+| `input` / `image` / `background` | `string | Buffer | Uint8Array` | required | Background image source. |
+| `output` / `out` | `string` | required for `generateMemeFile` | Output path. |
+| `topText` / `top` | `string` | `''` | Top caption. |
+| `bottomText` / `bottom` | `string` | `''` | Bottom caption. |
+| `uppercase` | `boolean` | `true` | Convert captions to uppercase. |
+| `format` | `png | jpg | jpeg | webp` | `png` | Output format. |
+| `quality` | `number` | `92` | JPEG/WebP quality. |
+| `textColor` | `auto | string` | `auto` | Caption fill color. |
+| `strokeColor` | `auto | string` | `auto` | Caption outline color. |
+| `strokeWidthRatio` | `number` | `0.075` | Outline width relative to font size. |
+| `shadow` | `boolean` | `true` | Enables drop shadow. |
+| `paddingRatio` | `number` | `0.045` | Caption padding relative to image size. |
+| `captionHeightRatio` | `number` | `0.25` | Height of the top and bottom caption areas. |
+| `fontSizeRatio` | `number` | `0.145` | Starting font size ratio. |
+| `minFontSizeRatio` | `number` | `0.018` | Minimum font size ratio. |
+| `lineHeight` | `number` | `0.92` | Caption line height. |
+| `fontPath` | `string | Buffer | Uint8Array | false` | bundled Anton | Custom TTF/OTF font source. |
 
-## Font
+## Fonts
 
-Font default:
+Default font:
 
 - `assets/Anton-Regular.ttf`
-- Sumber: Google Fonts `Anton`
-- Lisensi: SIL Open Font License 1.1
-- File lisensi: `assets/OFL-Anton.txt`
+- Source: Google Fonts, Anton family
+- License: SIL Open Font License 1.1
+- License file: `assets/OFL-Anton.txt`
 
-Font dirender sebagai SVG path memakai `opentype.js`, jadi hasilnya konsisten di server yang tidak punya font tersebut.
+Memegen converts text into SVG paths with `opentype.js`, so the rendered result stays consistent even when the host machine has no matching system font.
 
-Pakai font custom:
+Use a custom font:
 
 ```js
 await generateMemeFile({
   input: 'background.jpg',
   output: 'output/custom-font.png',
-  topText: 'custom',
-  bottomText: 'font',
+  topText: 'CUSTOM',
+  bottomText: 'FONT',
   fontPath: './fonts/MyFont.ttf'
 });
 ```
 
-Matikan embedded font dan pakai font-family SVG biasa:
+Disable embedded font paths and let SVG use a system font family:
 
 ```js
 await generateMemeFile({
   input: 'background.jpg',
   output: 'output/system-font.png',
-  topText: 'system',
-  bottomText: 'font',
+  topText: 'SYSTEM',
+  bottomText: 'FONT',
   fontPath: false,
   fontFamily: 'Impact, Arial Black, sans-serif'
 });
@@ -231,17 +222,17 @@ npm test
 npm run demo
 ```
 
-Script:
+Scripts:
 
-- `npm run check`: cek syntax file utama.
-- `npm test`: smoke test render, ukuran output, dan text bounds.
-- `npm run demo`: buat contoh output di `output/demo-meme.png`.
+- `npm run check`: syntax-checks the main files.
+- `npm test`: runs a render smoke test and checks text bounds.
+- `npm run demo`: creates `output/demo-meme.png`.
 
-Folder `node_modules/` dan `output/` sengaja di-ignore agar repository tetap bersih.
+`node_modules/` and `output/` are ignored so the repository stays clean.
 
 ## Publish Checklist
 
-Sebelum upload ke GitHub:
+Before publishing or pushing a release:
 
 ```bash
 rm -rf node_modules output
@@ -251,10 +242,10 @@ npm test
 npm pack --dry-run
 ```
 
-Pastikan yang masuk package hanya file penting: source, assets font, license, types, examples, dan README.
+The package should contain only source files, font assets, license files, type definitions, examples, tests, and documentation.
 
 ## License
 
-Code: MIT. Lihat `LICENSE`.
+Code: MIT. See `LICENSE`.
 
-Bundled font: Anton, SIL Open Font License 1.1. Lihat `assets/OFL-Anton.txt`.
+Bundled font: Anton, SIL Open Font License 1.1. See `assets/OFL-Anton.txt`.

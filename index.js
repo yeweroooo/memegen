@@ -239,8 +239,8 @@ function buildCaptionSvg({ text, zone, position, raw, settings }) {
     const y = yStart + index * layout.lineHeightPx;
     const lineWidth = measureText(line, layout.fontSize, settings);
     const x = zone.x + (zone.width - lineWidth) / 2;
-    const fontPath = settings.font.getPath(line, x, y, layout.fontSize);
-    return `<path d="${fontPath.toPathData(2)}"/>`;
+    const glyphPath = settings.font.getPath(line, x, y, layout.fontSize);
+    return `<path d="${glyphPath.toPathData(2)}"/>`;
   }).join('');
 
   return `<g data-position="${position}"

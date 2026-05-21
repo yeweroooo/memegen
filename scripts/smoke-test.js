@@ -13,8 +13,8 @@ const background = await sharp({
 
 const rendered = await renderMeme({
   background,
-  topText: 'wowowo',
-  bottomText: 'bising bodo aku nak tido text wrapping aman',
+  topText: 'when the render works',
+  bottomText: 'long captions should wrap safely',
   format: 'png'
 });
 
