@@ -1,5 +1,5 @@
 {
-  "name": "@yeweroooo/memegen",
+  "name": "@ghuts/meme",
   "version": "1.0.0",
   "description": "A JavaScript module for creating memes with Sharp, bundled Anton font, automatic text wrapping, and shrink-to-fit captions.",
   "type": "module",
@@ -12,6 +12,7 @@
     }
   },
   "bin": {
+    "meme": "cli.js",
     "memegen": "cli.js",
     "meme-generator": "cli.js"
   },
@@ -32,6 +33,7 @@
   },
   "keywords": [
     "meme",
+    "meme-js",
     "meme-generator",
     "sharp",
     "image",
@@ -39,18 +41,18 @@
     "canvas",
     "nodejs"
   ],
-  "author": "yeweroooo",
+  "author": "ghuts",
   "license": "MIT AND OFL-1.1",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yeweroooo/memegen.git"
+    "url": "git+https://github.com/yeweroooo/meme.git"
   },
   "bugs": {
-    "url": "https://github.com/yeweroooo/memegen/issues"
+    "url": "https://github.com/yeweroooo/meme/issues"
   },
-  "homepage": "https://github.com/yeweroooo/memegen#readme",
+  "homepage": "https://github.com/yeweroooo/meme#readme",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "sideEffects": false,
   "dependencies": {
