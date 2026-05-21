@@ -1,0 +1,51 @@
+{
+  "name": "memegen",
+  "version": "1.0.0",
+  "description": "A JavaScript module for creating memes with Sharp, bundled Anton font, automatic text wrapping, and shrink-to-fit captions.",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js"
+    }
+  },
+  "bin": {
+    "memegen": "./cli.js",
+    "meme-generator": "./cli.js"
+  },
+  "files": [
+    "assets/",
+    "cli.js",
+    "examples/",
+    "index.d.ts",
+    "index.js",
+    "LICENSE",
+    "README.md",
+    "scripts/"
+  ],
+  "scripts": {
+    "check": "node --check index.js && node --check cli.js && node --check examples/demo.js",
+    "demo": "node examples/demo.js",
+    "test": "node scripts/smoke-test.js"
+  },
+  "keywords": [
+    "meme",
+    "meme-generator",
+    "sharp",
+    "image",
+    "caption",
+    "canvas",
+    "nodejs"
+  ],
+  "license": "MIT AND OFL-1.1",
+  "sideEffects": false,
+  "dependencies": {
+    "opentype.js": "^2.0.0",
+    "sharp": "^0.34.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
