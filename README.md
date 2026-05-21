@@ -21,21 +21,21 @@ Memegen takes a background image, keeps the original image size, and draws top a
 From npm:
 
 ```bash
-npm install @ghuts/meme
+npm install @ghuts/memegen
 ```
 
 From a local clone:
 
 ```bash
 git clone <repo-url>
-cd meme
+cd memegen
 npm install
 ```
 
 ## Quick Start
 
 ```js
-import { generateMemeFile } from '@ghuts/meme';
+import { generateMemeFile } from '@ghuts/memegen';
 
 await generateMemeFile({
   input: 'background.jpg',
@@ -51,7 +51,7 @@ The output image will use the original dimensions of `background.jpg`.
 
 ```js
 import { readFile } from 'node:fs/promises';
-import { generateMeme } from '@ghuts/meme';
+import { generateMeme } from '@ghuts/memegen';
 
 const background = await readFile('background.jpg');
 
@@ -68,7 +68,7 @@ You can send the returned `Buffer` directly from an API route, bot, or serverles
 ## CLI
 
 ```bash
-npx @ghuts/meme \
+npx @ghuts/memegen \
   --image background.jpg \
   --top "WHEN THE BUILD PASSES" \
   --bottom "ON THE FIRST TRY" \
